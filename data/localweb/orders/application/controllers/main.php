@@ -27,28 +27,36 @@ class Main extends CI_Controller {
 		$crud->set_table('booking');
 
 		//give focus on name used for operations e.g. Add Order, Delete Order
-		$crud->set_subject('booking'); 
+		$crud->set_subject('booking');
 
 		//the columns function lists attributes you see on frontend view of the table
 		$crud->columns('bookingNo', 'performanceID', 'seatsQuantity', 'seatCost', 'filmTitle', 'memberNo');
 
 		//the fields function lists attributes to see on add/edit forms.
 		//Note no inclusion of invoiceNo as this is auto-incrementing
-		$crud->fields('bookingNo', 'performanceID');
+		$crud->fields('bookingNo', 'performanceID', 'seatCost', 'filmTitle', 'memberNo');
 
 		//set the foreign keys to appear as drop-down menus
 		// ('this fk column','referencing table', 'column in referencing table')
-		//$crud->set_relation('memberNo','members','memberNo');
+		$crud->set_relation('memberNo','members','memberNo');
 
 		//many-to-many relationship with link table see grocery crud website: www.grocerycrud.com/examples/set_a_relation_n_n
 		//('give a new name to related column for list in fields here', 'join table', 'other parent table', 'this fk in join table', 'other fk in join table', 'other parent table's viewable column to see in field')
-		//$crud->set_relation_n_n('items', 'order_items', 'items', 'invoice_no', 'item_id', 'itemDesc');
+		$crud->set_relation_n_n('items', 'order_items', 'items', 'invoice_no', 'item_id', 'itemDesc');
 
 		//form validation (could match database columns set to "not null")
 		//$crud->required_fields('invoiceNo', 'date', 'custID');
 
 		//change column heading name for readability ('columm name', 'name to display in frontend column header')
-		//$crud->display_as('custID', 'CustomerID');
+		$crud->display_as('bookingNo', 'Booking Number', 'performanceID', 'Performance ID');
+		$crud->display_as('performanceID', 'Performance ID');
+		$crud->display_as('seatsQuantity', 'Quantity of seats');
+		$crud->display_as('seatCost', 'Price Per Seat');
+		$crud->display_as('filmTitle', 'Film');
+		$crud->display_as('memberNo', 'Member');
+
+
+
 
 		$output = $crud->render();
 		$this->orders_output($output);
