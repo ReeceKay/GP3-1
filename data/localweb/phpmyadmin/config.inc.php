@@ -28,7 +28,7 @@ $i++;
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'config';
 $cfg['Servers'][$i]['user'] = 'root';
-$cfg['Servers'][$i]['password'] = '';
+$cfg['Servers'][$i]['password'] = 'root';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = '127.0.0.1';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
@@ -144,7 +144,7 @@ $cfg['SaveDir'] = '../../data/databases';
 /**
  * Should error reporting be enabled for JavaScript errors
  *
- * default = 'ask' 
+ * default = 'ask'
  */
 //$cfg['SendErrorReports'] = 'ask';
 
