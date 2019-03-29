@@ -17,7 +17,7 @@ class Main extends CI_Controller {
 		$this->load->view('home');
 	}
 
-	public function orders()
+	public function bookings()
 	{
 		$this->load->view('header');
 		$crud = new grocery_CRUD();
@@ -42,13 +42,13 @@ class Main extends CI_Controller {
 
 		//many-to-many relationship with link table see grocery crud website: www.grocerycrud.com/examples/set_a_relation_n_n
 		//('give a new name to related column for list in fields here', 'join table', 'other parent table', 'this fk in join table', 'other fk in join table', 'other parent table's viewable column to see in field')
-		$crud->set_relation_n_n('items', 'order_items', 'items', 'invoice_no', 'item_id', 'itemDesc');
+		//$crud->set_relation_n_n('items', 'order_items', 'items', 'invoice_no', 'item_id', 'itemDesc');
 
 		//form validation (could match database columns set to "not null")
 		//$crud->required_fields('invoiceNo', 'date', 'custID');
 
 		//change column heading name for readability ('columm name', 'name to display in frontend column header')
-		$crud->display_as('bookingNo', 'Booking Number', 'performanceID', 'Performance ID');
+		$crud->display_as('bookingNo', 'Booking Number');
 		$crud->display_as('performanceID', 'Performance ID');
 		$crud->display_as('seatsQuantity', 'Quantity of seats');
 		$crud->display_as('seatCost', 'Price Per Seat');
@@ -59,62 +59,91 @@ class Main extends CI_Controller {
 
 
 		$output = $crud->render();
-		$this->orders_output($output);
+		$this->bookings_output($output);
 	}
 
-	function orders_output($output = null)
+	function bookings_output($output = null)
 	{
 		//this function links up to corresponding page in the views folder to display content for this table
-		$this->load->view('orders_view.php', $output);
+		$this->load->view('bookings_view.php', $output);
 	}
 
-	public function items()
+	//========================================================================================================
+
+	public function films()
 	{
 		$this->load->view('header');
 		$crud = new grocery_CRUD();
 		$crud->set_theme('datatables');
 
-		$crud->set_table('items');
-		$crud->set_subject('item');
-		$crud->columns('itemID', 'itemDesc', 'orders');
-		$crud->fields('itemDesc', 'orders');
-		$crud->required_fields('itemID', 'itemDesc');
-		$crud->set_relation_n_n('orders', 'order_items', 'orders', 'item_id', 'invoice_no', 'invoiceNo');
-		$crud->display_as('itemDesc', 'Description');
+		$crud->set_table('film');
+		$crud->set_subject('film');
+		$crud->columns('filmTitle', 'director', 'releaseYear');
+		$crud->fields('filmTitle', 'director', 'releaseYear');
+		$crud->required_fields('filmNo', 'filmTitle');
+		//$crud->set_relation_n_n('orders', 'order_items', 'orders', 'item_id', 'invoice_no', 'invoiceNo');
+		$crud->display_as('filmTitle', 'Film');
 
 		$output = $crud->render();
-		$this->items_output($output);
+		$this->films_output($output);
 	}
 
-	function items_output($output = null)
+	function films_output($output = null)
 	{
-		$this->load->view('items_view.php', $output);
+		$this->load->view('films_view.php', $output);
 	}
-	public function customers()
+	//========================================================================================================
+
+	public function cinemas()
 	{
 		$this->load->view('header');
 		$crud = new grocery_CRUD();
 		$crud->set_theme('datatables');
-		$crud->set_table('customers');
-		$crud->set_subject('customer');
-		$crud->fields('custID', 'custName', 'custAddress', 'custTown', 'custPostcode', 'custTel', 'custEmail');
-		$crud->required_fields('custID', 'custName', 'custAddress', 'custTown', 'custPostcode', 'custTel', 'custEmail');
-		$crud->display_as('custID', 'CustomerID');
-		$crud->display_as('custName', 'Name');
-		$crud->display_as('custAddress', 'Address');
-		$crud->display_as('custTown', 'Town');
-		$crud->display_as('custPostcode', 'Postcode');
-		$crud->display_as('custTel', 'Phone');
-		$crud->display_as('custEmail', 'Email');
+
+		$crud->set_table('cinema');
+		$crud->set_subject('cinema');
+		$crud->columns('name', 'location', 'address');
+		$crud->fields('name', 'location', 'address');
+		$crud->required_fields('name', 'location', 'address');
+		//$crud->set_relation_n_n('orders', 'order_items', 'orders', 'item_id', 'invoice_no', 'invoiceNo');
+		//$crud->display_as('itemDesc', 'Description');
 
 		$output = $crud->render();
-		$this->cust_output($output);
+		$this->cinemas_output($output);
 	}
 
-	function cust_output($output = null)
+	function cinemas_output($output = null)
 	{
-		$this->load->view('cust_view.php', $output);
+		$this->load->view('cinemas_view.php', $output);
 	}
+
+//========================================================================================================
+
+	public function performances()
+	{
+		$this->load->view('header');
+		$crud = new grocery_CRUD();
+		$crud->set_theme('datatables');
+		$crud->set_table('performance');
+		$crud->set_subject('Performance');
+		//$crud->columns('name', 'screenNo', 'filmNo', 'date', 'startTime');
+		//$crud->fields('name', 'screenNo', 'filmTitle', 'date', 'startTime');
+		//$crud->required_fields('custID', 'custName', 'custAddress', 'custTown', 'custPostcode', 'custTel', 'custEmail');
+		$crud->set_relation('filmNo', 'film', 'filmTitle');
+		$crud->set_relation('cinemaNo', 'cinema', 'name');
+		$crud->display_as('filmnNo', 'filmTitle');
+		$crud->display_as('cinemaNo', 'name');
+
+		$output = $crud->render();
+		$this->performances_output($output);
+	}
+
+	function performances_output($output = null)
+	{
+		$this->load->view('performances_view.php', $output);
+	}
+
+	//========================================================================================================
 
 	public function orderline()
 	{
